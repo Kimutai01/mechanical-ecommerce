@@ -1,11 +1,15 @@
 import { useState } from "react";
-
-
+import NavBar from "./components/Navbar/Navbar";
+import Footer from "./components/Footer/Footer";
 
 function App() {
-  const [count, setCount] = useState(0);
-
-  return <></>;
+  return (
+    <>
+      <NavBar />
+      <h1 className="text-7xl">Mechanic ecommerce</h1>
+      <Footer />
+    </>
+  );
 }
 
 export default App;
