@@ -35,7 +35,11 @@ const Home = () => {
     // fetchProducts();
     const fetchProducts = async () => {
       const { data } = await axios.get("http://127.0.0.1:8000/api/products/");
+
+      setProducts(data);
     };
+
+    fetchProducts();
   }, []);
 
   return (
@@ -74,7 +78,7 @@ const Home = () => {
       <div className="bg-[#000] pt-10 px-5 md:pt-28 pb-32 flex flex-col-reverse md:flex-row gap-10 md:px-32">
         <div className="md:w-[70%] grid grid-cols-1 md:grid-cols-2 gap-10">
           {products.map((product) => {
-            return <Product key={product.id} product={product} />;
+            return <Product key={product._id} product={product} />;
           })}
         </div>
         <div className="md:w-[30%] md:sticky md:top-20 md:h-screen">

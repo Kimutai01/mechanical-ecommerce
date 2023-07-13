@@ -1,4 +1,6 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+
+import axios from "axios";
 import { useParams } from "react-router-dom";
 import { AiOutlineCalendar } from "react-icons/ai";
 import { BsChevronDown } from "react-icons/bs";
@@ -6,12 +8,26 @@ import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { AiOutlineClose, AiOutlineMenu } from "react-icons/ai";
 
-import products from "../components/products";
 import Rating from "../components/Rating";
 
 const ProductDetail = ({ match }) => {
   const { id } = useParams();
-  const product = products.find((p) => p._id === id);
+  const [product, setProducts] = useState([]);
+
+  useEffect(() => {
+    const fetchProduct = async () => {
+      const { data } = await axios.get(
+        `http://127.0.0.1:8000/api/products/${id}`
+      );
+
+      setProducts(data);
+    };
+
+    fetchProduct();
+  }, []);
+
+  console.log(product);
+
   return (
     <>
       <div>
