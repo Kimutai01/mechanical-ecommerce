@@ -38,7 +38,6 @@ const Home = () => {
 
   return (
     <>
-      {status === "loading" && <div className="white">Loading...</div>}: (
       <div className="">
         <div className="">
           <Swiper
@@ -71,6 +70,17 @@ const Home = () => {
             </SwiperSlide>
           </Swiper>
         </div>
+        {status === "loading" ? (
+          <div className="flex justify-center items-center h-screen">
+            <h1 className="text-3xl font-bold">Loading...</h1>
+          </div>
+        ) : (
+          status === "failed" && (
+            <div className="flex justify-center items-center h-screen">
+              <h1 className="text-3xl font-bold">{error}</h1>
+            </div>
+          )
+        )}
         <div className="bg-[#000] pt-10 px-5 md:pt-28 pb-32 flex flex-col-reverse md:flex-row gap-10 md:px-32">
           <div className="md:w-[70%] grid grid-cols-1 md:grid-cols-2 gap-10">
             {products.map((product) => {
@@ -145,7 +155,6 @@ const Home = () => {
           </div>
         </div>
       </div>
-      )
     </>
   );
 };
