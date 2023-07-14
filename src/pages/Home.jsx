@@ -1,5 +1,5 @@
 import Product from "../components/Product";
-import { fetchProducts } from "../features/productSlice";
+import { fetchProducts } from "../features/productsSlice";
 import { toast, ToastContainer } from "react-toastify";
 
 import "react-toastify/dist/ReactToastify.css";
@@ -14,7 +14,7 @@ import {
   selectAllProducts,
   getProductError,
   getProductStatus,
-} from "../features/productSlice";
+} from "../features/productsSlice";
 
 import React, { useRef, useState, useEffect } from "react";
 // Import Swiper React components

@@ -1,35 +1,34 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
-const productsUrl = "http://127.0.0.1:8000/api/products/";
-
+const productUrl = "http://127.0.0.1:8000/api/products/:id";
 const initialState = {
-  products: [],
+  product: {},
   status: "idle",
   error: null,
 };
 
-export const fetchProducts = createAsyncThunk(
-  "products/fetchProducts",
-  async () => {
-    const response = await axios.get(productsUrl);
+export const fetchProduct = createAsyncThunk(
+  "product/fetchProduct",
+  async (id) => {
+    const response = await axios.get(productUrl.replace(":id", id));
     return response.data;
   }
 );
 
 const productSlice = createSlice({
-  name: "products",
+  name: "product",
   initialState,
   reducers: {},
   extraReducers: {
-    [fetchProducts.pending]: (state, action) => {
+    [fetchProduct.pending]: (state, action) => {
       state.status = "loading";
     },
-    [fetchProducts.fulfilled]: (state, action) => {
+    [fetchProduct.fulfilled]: (state, action) => {
       state.status = "succeeded";
-      state.products = action.payload;
+      state.product = action.payload;
     },
-    [fetchProducts.rejected]: (state, action) => {
+    [fetchProduct.rejected]: (state, action) => {
       state.status = "failed";
       state.error = action.error.message;
     },
@@ -38,6 +37,6 @@ const productSlice = createSlice({
 
 export default productSlice.reducer;
 
-export const selectAllProducts = (state) => state.products.products;
-export const getProductStatus = (state) => state.products.status;
-export const getProductError = (state) => state.products.error;
+export const selectProduct = (state) => state.product.product;
+export const selectProductStatus = (state) => state.product.status;
+export const selectProductError = (state) => state.product.error;
