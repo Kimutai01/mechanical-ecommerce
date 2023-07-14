@@ -37,7 +37,7 @@ const ProductDetail = ({ match }) => {
         <div className="pt-28 bg-[#000] px-40 pb-20 flex">
           <div className="mr-20 w-[50%]">
             <img
-              src={product.image}
+              src={`http://127.0.0.1:8000/${product.image}`}
               alt={product.name}
               className=" w-full rounded-t-lg"
             />
