@@ -1,5 +1,10 @@
 import Product from "../components/Product";
 import { fetchProducts } from "../features/productSlice";
+import { toast, ToastContainer } from "react-toastify";
+
+import "react-toastify/dist/ReactToastify.css";
+
+import { RingLoader } from "react-spinners";
 
 import { AiOutlineCalendar } from "react-icons/ai";
 
@@ -22,6 +27,7 @@ import "swiper/css/pagination";
 // import required modules
 import { Pagination } from "swiper/modules";
 import axios from "axios";
+import Loader from "../components/Loader";
 
 const Home = () => {
   const dispatch = useDispatch();
@@ -33,6 +39,16 @@ const Home = () => {
   useEffect(() => {
     if (status === "idle") {
       dispatch(fetchProducts());
+    }
+
+    if (status === "failed") {
+      toast.error(error, {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        draggable: true,
+      });
     }
   }, [status, dispatch]);
 
@@ -70,17 +86,8 @@ const Home = () => {
             </SwiperSlide>
           </Swiper>
         </div>
-        {status === "loading" ? (
-          <div className="flex justify-center items-center h-screen">
-            <h1 className="text-3xl font-bold">Loading...</h1>
-          </div>
-        ) : (
-          status === "failed" && (
-            <div className="flex justify-center items-center h-screen">
-              <h1 className="text-3xl font-bold">{error}</h1>
-            </div>
-          )
-        )}
+        <ToastContainer />
+        {status === "loading" && <Loader />}
         <div className="bg-[#000] pt-10 px-5 md:pt-28 pb-32 flex flex-col-reverse md:flex-row gap-10 md:px-32">
           <div className="md:w-[70%] grid grid-cols-1 md:grid-cols-2 gap-10">
             {products.map((product) => {
