@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
-const productUrl = "http://127.0.0.1:8000/api/products/:id";
+const productsUrl = "http://127.0.0.1:8000/api/products/";
 const initialState = {
   product: {},
   status: "idle",
@@ -11,7 +11,7 @@ const initialState = {
 export const fetchProduct = createAsyncThunk(
   "product/fetchProduct",
   async (id) => {
-    const response = await axios.get(productUrl.replace(":id", id));
+    const response = await axios.get(`${productsUrl}${id}`);
     return response.data;
   }
 );
@@ -38,5 +38,5 @@ const productSlice = createSlice({
 export default productSlice.reducer;
 
 export const selectProduct = (state) => state.product.product;
-export const selectProductStatus = (state) => state.product.status;
-export const selectProductError = (state) => state.product.error;
+export const getProductStatus = (state) => state.product.status;
+export const getProductError = (state) => state.product.error;

@@ -12,8 +12,8 @@ import { useSelector, useDispatch } from "react-redux";
 
 import {
   selectAllProducts,
-  getProductError,
-  getProductStatus,
+  getProductsError,
+  getProductsStatus,
 } from "../features/productsSlice";
 
 import React, { useRef, useState, useEffect } from "react";
@@ -33,8 +33,8 @@ const Home = () => {
   const dispatch = useDispatch();
 
   const products = useSelector(selectAllProducts);
-  const error = useSelector(getProductError);
-  const status = useSelector(getProductStatus);
+  const error = useSelector(getProductsError);
+  const status = useSelector(getProductsStatus);
 
   useEffect(() => {
     if (status === "idle") {
