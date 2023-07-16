@@ -1,4 +1,7 @@
 import React, { useState, useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { ToastContainer, toast } from "react-toastify";
+import { selectCartItemsCount } from "../../features/cartSlice";
 import { AiOutlineClose, AiOutlineMenu } from "react-icons/ai";
 import { FaLinkedin, FaGithub, FaTwitter } from "react-icons/fa";
 import { FiPhoneCall } from "react-icons/fi";
@@ -49,6 +52,8 @@ const NavBar = () => {
   const handleStoreClick = () => {
     setShowStoreDetails(!showStoreDetails);
   };
+
+  const cartItemsCount = useSelector(selectCartItemsCount);
 
   return (
     <div
@@ -103,12 +108,19 @@ const NavBar = () => {
             style={{ color: `${linkColor}` }}
           >
             {/* cart with item count */}
-
-            <HiShoppingCart
-              size={40}
-              className="text-[#ff4d23] text-center align-middle justify-center mr-3 "
-            />
-
+            <Link to="/cart">
+              <div className="relative">
+                <HiShoppingCart
+                  size={40}
+                  className="text-[#ff4d23] text-center align-middle justify-center mr-3 "
+                />
+                {cartItemsCount > 0 && (
+                  <div className="absolute top-[-5px] right-[-5px] bg-[#ff4d23] text-[#fff] rounded-full w-6 h-6 flex items-center justify-center text-sm">
+                    {cartItemsCount}
+                  </div>
+                )}
+              </div>
+            </Link>
             <RiMenu5Line
               size={40}
               className="text-[#ff4d23] text-center align-middle items-center justify-center"
@@ -119,10 +131,17 @@ const NavBar = () => {
           <div className="flex">
             {/* item count on the cart icon */}
             <Link to="/cart">
-              <HiShoppingCart
-                size={40}
-                className="text-[#ff4d23] text-center align-middle justify-center mr-3 mt-2  cursor-pointer"
-              />
+              <div className="relative">
+                <HiShoppingCart
+                  size={40}
+                  className="text-[#ff4d23] text-center align-middle justify-center mr-3 mt-2  cursor-pointer"
+                />
+                {cartItemsCount > 0 && (
+                  <div className="absolute top-[-5px] right-[-5px] bg-[#ff4d23] text-[#fff] rounded-full w-6 h-6 flex items-center justify-center text-sm">
+                    {cartItemsCount}
+                  </div>
+                )}
+              </div>
             </Link>
             <Link to="/login">
               <CiUser

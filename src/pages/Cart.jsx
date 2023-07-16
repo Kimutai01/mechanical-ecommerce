@@ -49,14 +49,14 @@ const Cart = () => {
       <h2 className="text-2xl font-bold text-center text-[red]">
         Shopping Cart
       </h2>
-      <div className="flex">
-        <div>
+      <div className="flex gap-20 mx-20">
+        <div className="flex flex-col gap-5">
           {cart.map((item) => (
-            <div className="flex items-center">
+            <div className="flex gap-5 rounded-lg p-4 items-center bg-[#161616]">
               <img
                 src={`http://127.0.0.1:8000/${item.image}`}
                 alt=""
-                className="h-28 w-28 "
+                className="h-28 w-28 rounded-md"
               />
               <h2 className="text-[#fff]">{item.name}</h2>
               <h2 className="text-[#fff]">{item.price}</h2>

@@ -87,7 +87,11 @@ const Home = () => {
           </Swiper>
         </div>
         <ToastContainer />
-        {status === "loading" && <Loader />}
+        {status === "loading" && (
+          <div className="flex justify-center items-center pt-28 bg-black">
+            <div className="w-20 h-20 rounded-full animate-spin border-2 border-solid border-[red] border-t-transparent"></div>
+          </div>
+        )}
         <div className="bg-[#000] pt-10 px-5 md:pt-28 pb-32 flex flex-col-reverse md:flex-row gap-10 md:px-32">
           <div className="md:w-[70%] grid grid-cols-1 md:grid-cols-2 gap-10">
             {products.map((product) => {
