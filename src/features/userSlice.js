@@ -14,16 +14,15 @@ export const login = (email, password) => async (dispatch) => {
         "Content-Type": "application/json",
       },
     };
-    const response = await axios.post(
+    const { data } = await axios.post(
       "http://127.0.0.1:8000/api/users/login/",
       { username: email, password: password },
       config
     );
-    const data = await response.json();
     dispatch(loginSuccess(data));
     localStorage.setItem("userInfo", JSON.stringify(data));
   } catch (error) {
-    console.error("Error logging in:", error);
+    console.error("Error logging in user:", error);
   }
 };
 
@@ -38,3 +37,5 @@ const userSlice = createSlice({
 });
 
 export default userSlice.reducer;
+export const { loginSuccess } = userSlice.actions;
+export const selectUser = (state) => state.user.user;

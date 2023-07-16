@@ -3,10 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { ToastContainer, toast } from "react-toastify";
 import { selectCartItemsCount } from "../../features/cartSlice";
 import { AiOutlineClose, AiOutlineMenu } from "react-icons/ai";
-import { FaLinkedin, FaGithub, FaTwitter } from "react-icons/fa";
-import { FiPhoneCall } from "react-icons/fi";
-import { FaWhatsapp } from "react-icons/fa";
-
+import { selectUser } from "../../features/userSlice";
 import { CiUser } from "react-icons/ci";
 
 import { Link } from "react-router-dom";
@@ -17,6 +14,7 @@ import { BsChevronDown } from "react-icons/bs";
 
 import { motion } from "framer-motion";
 const NavBar = () => {
+  const user = useSelector(selectUser);
   const [nav, setNav] = useState(false);
   const [shadow, setShadow] = useState(false);
   const [navBg, setNavBg] = useState("#ecf0f3");
@@ -54,6 +52,10 @@ const NavBar = () => {
   };
 
   const cartItemsCount = useSelector(selectCartItemsCount);
+
+  const logoutHandler = () => {
+    console.log("logout");
+  };
 
   return (
     <div
@@ -125,34 +127,78 @@ const NavBar = () => {
               size={40}
               className="text-[#ff4d23] text-center align-middle items-center justify-center"
             />
-            <Link to="/login">
-              <CiUser size={40} className="text-[#ff4d23] cursor-pointer" />
-            </Link>
+            {user ? (
+              <div className="group ml-10">
+                <li className="font-medium  text-xl hover:text-[#ff4d23] hover:scale-105 transition-all duration-all hover:border-y-black ">
+                  {user.name}
+                  <div className="opacity-0 group-hover:opacity-100 w-[200px] absolute left-0 top-full bg-[#000] pt-10 py-2 rounded-lg shadow-lg">
+                    <ul className="p-2 flex flex-col">
+                      <Link
+                        to="/profile"
+                        className="text-white py-1 px-2 relative hover:text-[#ff4d23] hover:scale-105 transition-all duration-all hover:border-y-black"
+                      >
+                        Profile
+                      </Link>
+                      <div
+                        className="text-[#fff] py-1 px-2 hover:text-[#ff4d23] hover:scale-105 transition-all duration-all hover:border-y-black"
+                        onClick={logoutHandler}
+                      >
+                        Logout
+                      </div>
+                    </ul>
+                  </div>
+                </li>
+              </div>
+            ) : (
+              <Link to="/login">
+                <CiUser size={40} className="text-[#ff4d23] cursor-pointer" />
+              </Link>
+            )}
           </div>
         </div>
         <div className="hidden md:flex">
           <div className="flex">
-            {/* item count on the cart icon */}
-            <Link to="/cart">
-              <div className="relative">
-                <HiShoppingCart
-                  size={40}
-                  className="text-[#ff4d23] text-center align-middle justify-center mr-3 mt-2  cursor-pointer"
-                />
-                {cartItemsCount > 0 && (
-                  <div className="absolute top-[-5px] right-[-5px] bg-[#ff4d23] text-[#fff] rounded-full w-6 h-6 flex items-center justify-center text-sm">
-                    {cartItemsCount}
+            {user ? (
+              <div className="group ml-10">
+                <li className="font-medium  text-xl text-white mt-[10px] hover:text-[#ff4d23] hover:scale-105 transition-all duration-all hover:border-y-black list-none">
+                  {user.name}
+                  <div className="opacity-0 group-hover:opacity-100 w-[200px] absolute left-0 top-full bg-[#000] pt-10 py-2 rounded-lg shadow-lg">
+                    <ul className="p-2 flex flex-col">
+                      <Link
+                        to="/profile"
+                        className="text-white py-1 px-2 relative hover:text-[#ff4d23] hover:scale-105 transition-all duration-all hover:border-y-black"
+                      >
+                        Profile
+                      </Link>
+                      <div
+                        className="text-[#fff] py-1 px-2 hover:text-[#ff4d23] hover:scale-105 transition-all duration-all hover:border-y-black cursor-pointer"
+                        onClick={logoutHandler}
+                      >
+                        Logout
+                      </div>
+                    </ul>
                   </div>
-                )}
+                </li>
               </div>
-            </Link>
-            <Link to="/login">
-              <CiUser
-                size={40}
-                className="text-[#ff4d23] cursor-pointer mt-2"
-              />
-            </Link>
+            ) : (
+              <Link to="/login">
+                <CiUser size={40} className="text-[#ff4d23] cursor-pointer" />
+              </Link>
+            )}
           </div>
+          <Link to="/cart">
+            <div className="relative">
+              <HiShoppingCart
+                size={40}
+                className="text-[#ff4d23] text-center align-middle justify-center mr-3 mt-2  cursor-pointer"
+              />
+              {cartItemsCount > 0 && (
+                <div className="absolute top-[-5px] right-[-5px] bg-[#ff4d23] text-[#fff] rounded-full w-6 h-6 flex items-center justify-center text-sm">
+                  {cartItemsCount}
+                </div>
+              )}
+            </div>
+          </Link>
         </div>
       </div>
 
