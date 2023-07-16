@@ -19,10 +19,31 @@ export const login = (email, password) => async (dispatch) => {
       { username: email, password: password },
       config
     );
+
     dispatch(loginSuccess(data));
     localStorage.setItem("userInfo", JSON.stringify(data));
   } catch (error) {
     console.error("Error logging in:", error);
+  }
+};
+
+export const register = (name, email, password) => async (dispatch) => {
+  try {
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+    const { data } = await axios.post(
+      "http://127.0.0.1:8000/api/users/register/",
+      { name, email, password },
+      config
+    );
+
+    dispatch(registerSuccess(data));
+    localStorage.setItem("userInfo", JSON.stringify(data));
+  } catch (error) {
+    console.error("Error registering:", error);
   }
 };
 
@@ -38,14 +59,15 @@ const userSlice = createSlice({
     loginSuccess: (state, action) => {
       state.user = action.payload;
     },
-
     logout: (state) => {
       state.user = null;
+    },
+    registerSuccess: (state, action) => {
+      state.user = action.payload;
     },
   },
 });
 
 export default userSlice.reducer;
-export const { loginSuccess } = userSlice.actions;
-export const { logout } = userSlice.actions;
+export const { loginSuccess, logout, registerSuccess } = userSlice.actions;
 export const selectUser = (state) => state.user.user;
