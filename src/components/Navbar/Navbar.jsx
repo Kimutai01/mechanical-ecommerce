@@ -125,6 +125,9 @@ const NavBar = () => {
               size={40}
               className="text-[#ff4d23] text-center align-middle items-center justify-center"
             />
+            <Link to="/login">
+              <CiUser size={40} className="text-[#ff4d23] cursor-pointer" />
+            </Link>
           </div>
         </div>
         <div className="hidden md:flex">
@@ -148,13 +151,6 @@ const NavBar = () => {
                 size={40}
                 className="text-[#ff4d23] cursor-pointer mt-2"
               />
-            </Link>
-          </div>
-          <div>
-            <Link to="/contact">
-              <button className="uppercase text-[#fff] bg-[#808080] rounded-full hover:bg-[#ff4d23] font-bold p-3 hidden md:block">
-                get an appointment
-              </button>
             </Link>
           </div>
         </div>
