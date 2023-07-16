@@ -4,6 +4,7 @@ import { ToastContainer, toast } from "react-toastify";
 import { selectCartItemsCount } from "../../features/cartSlice";
 import { AiOutlineClose, AiOutlineMenu } from "react-icons/ai";
 import { selectUser } from "../../features/userSlice";
+import { logoutUser } from "../../features/userSlice";
 import { CiUser } from "react-icons/ci";
 
 import { Link } from "react-router-dom";
@@ -52,9 +53,18 @@ const NavBar = () => {
   };
 
   const cartItemsCount = useSelector(selectCartItemsCount);
+  const dispatch = useDispatch();
 
   const logoutHandler = () => {
-    console.log("logout");
+    dispatch(logoutUser());
+
+    toast.success("Logged out successfully", {
+      position: "top-center",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      draggable: true,
+    });
   };
 
   return (

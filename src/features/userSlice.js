@@ -22,8 +22,13 @@ export const login = (email, password) => async (dispatch) => {
     dispatch(loginSuccess(data));
     localStorage.setItem("userInfo", JSON.stringify(data));
   } catch (error) {
-    console.error("Error logging in user:", error);
+    console.error("Error logging in:", error);
   }
+};
+
+export const logoutUser = () => (dispatch) => {
+  localStorage.removeItem("userInfo");
+  dispatch(logout());
 };
 
 const userSlice = createSlice({
@@ -33,9 +38,14 @@ const userSlice = createSlice({
     loginSuccess: (state, action) => {
       state.user = action.payload;
     },
+
+    logout: (state) => {
+      state.user = null;
+    },
   },
 });
 
 export default userSlice.reducer;
 export const { loginSuccess } = userSlice.actions;
+export const { logout } = userSlice.actions;
 export const selectUser = (state) => state.user.user;
