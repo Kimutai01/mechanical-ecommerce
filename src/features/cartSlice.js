@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const cartItemsFromStorage = localStorage.getItem("cartItems");
+const shippingAddressFromStorage = localStorage.getItem("shippingAddress");
 
 export const addItemsToCart = (id, qty) => async (dispatch, getState) => {
   try {
@@ -47,8 +48,20 @@ export const removeItemsFromCart = (id) => async (dispatch, getState) => {
   }
 };
 
+export const saveShippingAddress = (data) => async (dispatch) => {
+  try {
+    dispatch(shippingAddress(data));
+    localStorage.setItem("shippingAddress", JSON.stringify(data));
+  } catch (error) {
+    console.error("Error saving shipping address:", error);
+  }
+};
+
 const initialState = {
   cartItems: cartItemsFromStorage ? JSON.parse(cartItemsFromStorage) : [],
+  shippingAddress: shippingAddressFromStorage
+    ? JSON.parse(shippingAddressFromStorage)
+    : {},
 };
 
 export const cartSlice = createSlice({
@@ -74,14 +87,20 @@ export const cartSlice = createSlice({
         (i) => i.product !== item.product
       );
     },
+
+    shippingAddress: (state, action) => {
+      const item = action.payload;
+      state.shippingAddress = item;
+    },
   },
 
   // extraReducers: {
 });
 
-export const { addToCart, removeFromCart } = cartSlice.actions;
+export const { addToCart, removeFromCart, shippingAddress } = cartSlice.actions;
 
 export const selectCartItems = (state) => state.cart.cartItems;
+export const selectShippingAddress = (state) => state.cart.shippingAddress;
 
 export const selectCartItemsCount = (state) =>
   state.cart.cartItems.reduce((acc, item) => acc + item.qty, 0);

@@ -9,12 +9,14 @@ import {
 import { toast, ToastContainer } from "react-toastify";
 import { BsFillTrash3Fill } from "react-icons/bs";
 import { useNavigate } from "react-router-dom";
+import { selectUser } from "../features/userSlice";
 
 const Cart = () => {
   const navigate = useNavigate();
   const match = useMatch("/cart/:id");
   const { id } = match?.params || "";
   console.log(id);
+  const user = useSelector(selectUser);
 
   const qty = useLocation().search
     ? Number(useLocation().search.split("=")[1])
@@ -23,7 +25,7 @@ const Cart = () => {
 
   const checkoutHandler = () => {
     dispatch(removeItemsFromCart(id));
-    navigate("/login?redirect=shipping");
+    navigate("/login?redirect=/shipping");
   };
 
   const cart = useSelector(selectCartItems);
