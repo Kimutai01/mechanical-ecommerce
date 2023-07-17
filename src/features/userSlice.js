@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
+import { userDetailReset } from "./profileSlice";
 
 const userInfoFromStorage = localStorage.getItem("userInfo");
 
@@ -50,6 +51,7 @@ export const register = (name, email, password) => async (dispatch) => {
 export const logoutUser = () => (dispatch) => {
   localStorage.removeItem("userInfo");
   dispatch(logout());
+  dispatch(userDetailReset());
 };
 
 const userSlice = createSlice({
@@ -70,4 +72,5 @@ const userSlice = createSlice({
 
 export default userSlice.reducer;
 export const { loginSuccess, logout, registerSuccess } = userSlice.actions;
+
 export const selectUser = (state) => state.user.user;
