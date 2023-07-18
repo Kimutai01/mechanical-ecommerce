@@ -8,6 +8,7 @@ import { selectShippingAddress } from "../features/cartSlice";
 import { saveShippingAddress } from "../features/cartSlice";
 
 import { Link, redirect } from "react-router-dom";
+
 import CheckoutSteps from "../components/CheckoutSteps";
 
 const Shipping = () => {
@@ -17,6 +18,8 @@ const Shipping = () => {
   const [city, setCity] = useState(shippingAddress.city);
   const [postalCode, setPostalCode] = useState(shippingAddress.postalCode);
   const [country, setCountry] = useState(shippingAddress.country);
+
+  const navigate = useNavigate();
 
   const submitHandler = (e) => {
     e.preventDefault();

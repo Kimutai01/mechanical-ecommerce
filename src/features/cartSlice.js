@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const cartItemsFromStorage = localStorage.getItem("cartItems");
 const shippingAddressFromStorage = localStorage.getItem("shippingAddress");
+const paymentMethodFromStorage = localStorage.getItem("paymentMethod");
 
 export const addItemsToCart = (id, qty) => async (dispatch, getState) => {
   try {
@@ -57,10 +58,22 @@ export const saveShippingAddress = (data) => async (dispatch) => {
   }
 };
 
+export const savePaymentMethod = (data) => async (dispatch) => {
+  try {
+    dispatch(paymentMethod(data));
+    localStorage.setItem("paymentMethod", JSON.stringify(data));
+  } catch (error) {
+    console.error("Error saving payment method:", error);
+  }
+};
+
 const initialState = {
   cartItems: cartItemsFromStorage ? JSON.parse(cartItemsFromStorage) : [],
   shippingAddress: shippingAddressFromStorage
     ? JSON.parse(shippingAddressFromStorage)
+    : {},
+  paymentMethod: paymentMethodFromStorage
+    ? JSON.parse(paymentMethodFromStorage)
     : {},
 };
 
@@ -92,15 +105,22 @@ export const cartSlice = createSlice({
       const item = action.payload;
       state.shippingAddress = item;
     },
+
+    paymentMethod: (state, action) => {
+      const item = action.payload;
+      state.paymentMethod = item;
+    },
   },
 
   // extraReducers: {
 });
 
-export const { addToCart, removeFromCart, shippingAddress } = cartSlice.actions;
+export const { addToCart, removeFromCart, shippingAddress, paymentMethod } =
+  cartSlice.actions;
 
 export const selectCartItems = (state) => state.cart.cartItems;
 export const selectShippingAddress = (state) => state.cart.shippingAddress;
+export const selectPaymentMethod = (state) => state.cart.paymentMethod;
 
 export const selectCartItemsCount = (state) =>
   state.cart.cartItems.reduce((acc, item) => acc + item.qty, 0);

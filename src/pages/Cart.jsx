@@ -24,7 +24,7 @@ const Cart = () => {
   const dispatch = useDispatch();
 
   const checkoutHandler = () => {
-    dispatch(removeItemsFromCart(id));
+    // dispatch(removeItemsFromCart(id));
     navigate("/login?redirect=/shipping");
   };
 
