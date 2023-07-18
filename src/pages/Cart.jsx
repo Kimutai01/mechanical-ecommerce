@@ -30,7 +30,8 @@ const Cart = () => {
 
   const cart = useSelector(selectCartItems);
   console.log(cart);
-  cart.length < 1 &&
+  console.log(cart);
+  cart.length === 0 &&
     toast.error("Your cart is empty", {
       position: "top-center",
       autoClose: 5000,
