@@ -1,14 +1,24 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
 import { orderDetails } from "../features/orderSlice";
 import CheckoutSteps from "../components/CheckoutSteps";
 import { selectOrderDetails } from "../features/orderSlice";
+import { selectOrderPay } from "../features/orderSlice";
+import { payOrder } from "../features/orderSlice";
+import { selectLoading, selectError } from "../features/orderSlice";
+import Loader from "../components/Loader";
+import { PayPalButton } from "react-paypal-button-v2";
 
 const Order = () => {
   const dispatch = useDispatch();
+  const [sdkReady, setSdkReady] = useState(false);
+
   const { id } = useParams();
+  console.log(id);
   const orderDetail = useSelector(selectOrderDetails);
+  const orderPay = useSelector(selectOrderPay);
+  const error = useSelector(selectError);
   console.log(orderDetail);
 
   //   const itemsPrice = orderDetail.orderItems.reduce(
@@ -16,16 +26,51 @@ const Order = () => {
   //     0
   //   );
 
+  //   AbUcQE9bOtTKsrCYMEaJ7jWUP2mr9nNuqglCRz6Z8AATAZvwhIFag1k7bYRPjH3vy9ClInyOlHtZWY9w;
+
+  const loadingPay = useSelector(selectLoading);
+
+  const addPayPalScript = () => {
+    const script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src = `https://www.paypal.com/sdk/js?client-id=AbUcQE9bOtTKsrCYMEaJ7jWUP2mr9nNuqglCRz6Z8AATAZvwhIFag1k7bYRPjH3vy9ClInyOlHtZWY9w`;
+    script.async = true;
+    script.onload = () => {
+      setSdkReady(true);
+    };
+    document.body.appendChild(script);
+  };
+  useEffect(() => {
+    if (!orderDetail || !orderDetail._id) {
+      // Order details are not fetched yet or are undefined, add any additional logic if needed
+      return;
+    }
+    if (!orderDetail.isPaid) {
+      if (!window.paypal) {
+        addPayPalScript();
+      } else {
+        setSdkReady(true);
+      }
+    }
+  }, [orderDetail]);
+  console.log(Number(id));
   useEffect(() => {
     dispatch(orderDetails(id));
   }, [dispatch, id]);
+  console.log(orderDetail._id);
 
   // Check if orderDetail is not loaded yet
   if (!orderDetail._id) {
     return <div>Loading...</div>;
   }
+  const successPaymentHandler = (paymentResult) => {
+    console.log(paymentResult);
+    if (orderDetail._id) {
+      dispatch(payOrder(orderDetail._id, paymentResult));
+      // console.log({ id: orderDetail._id, paymentResult })
+    }
+  };
 
-  // If orderDetail is loaded, display the content
   return (
     <div className="bg-[#000] pt-32 pb-20">
       <div className="flex mx-20 mt-10">
@@ -150,6 +195,21 @@ const Order = () => {
                 <p className="text-[#fff] text-lg font-medium">
                   $ {orderDetail.totalPrice}
                 </p>
+              </div>
+              <div className="flex justify-between flex-row mt-5 gap-32 border-b border-[gray] pb-5">
+                {!orderDetail.isPaid && (
+                  <div className="flex flex-col">
+                    {loadingPay && <Loader />}
+                    {!sdkReady ? (
+                      <Loader />
+                    ) : (
+                      <PayPalButton
+                        amount={orderDetail.totalPrice}
+                        onSuccess={successPaymentHandler}
+                      />
+                    )}
+                  </div>
+                )}
               </div>
             </div>
           </div>
