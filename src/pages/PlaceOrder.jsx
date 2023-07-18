@@ -1,20 +1,26 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { ToastContainer, toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { selectShippingAddress } from "../features/cartSlice";
 import { selectCartItems } from "../features/cartSlice";
 import { selectPaymentMethod } from "../features/cartSlice";
+import { createOrder } from "../features/orderSlice";
+import { selectOrder } from "../features/orderSlice";
+import { resetOrder } from "../features/orderSlice";
+import { clearCart } from "../features/cartSlice";
 
 import CheckoutSteps from "../components/CheckoutSteps";
 
 const PlaceOrder = () => {
   const dispatch = useDispatch();
+  const orderItem = useSelector(selectOrder);
   const cart = useSelector(selectCartItems);
   const shippingAddress = useSelector(selectShippingAddress);
   const paymentMethod = useSelector(selectPaymentMethod);
 
   // Calculate the prices and create a new order object
+  const navigate = useNavigate();
   const itemsPrice = cart.reduce((acc, item) => acc + item.price * item.qty, 0);
   const shippingPrice = itemsPrice > 100 ? 0 : 10;
   const taxPrice = Number((0.15 * itemsPrice).toFixed(2));
@@ -26,14 +32,34 @@ const PlaceOrder = () => {
     totalPrice,
   };
 
-  if (!shippingAddress.address) {
+  if (!paymentMethod) {
     const navigate = useNavigate();
-    navigate("/shipping");
+    navigate(`/payment`);
   }
 
   const placeOrder = () => {
-    console.log("order placed");
+    dispatch(
+      createOrder({
+        ...order,
+        orderItems: cart,
+        shippingAddress,
+        paymentMethod,
+      })
+    );
+    toast.success("Order Placed Successfully", {
+      position: "top-center",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+    });
   };
+
+  useEffect(() => {
+    if (orderItem._id) {
+      dispatch(resetOrder());
+      navigate(`/order/${orderItem._id}`);
+    }
+  }, [orderItem._id, dispatch, navigate]);
 
   return (
     <div className="bg-[#000] pt-32 pb-20">
