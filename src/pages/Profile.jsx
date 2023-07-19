@@ -65,7 +65,7 @@ const Profile = () => {
     if (!user) {
       navigate("/login");
     } else {
-      if (!userDetails.name) {
+      if (!userDetails.name || user._id !== userDetails._id) {
         dispatch(getUserDetails("profile"));
       } else {
         setName(userDetails.name);

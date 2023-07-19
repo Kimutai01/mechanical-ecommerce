@@ -2,7 +2,12 @@ import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { ToastContainer, toast } from "react-toastify";
 import { useLocation, useNavigate } from "react-router-dom";
-import { getAllUsers, selectUsers, selectUser } from "../features/userSlice";
+import {
+  getAllUsers,
+  selectUsers,
+  selectUser,
+  deleteUserById,
+} from "../features/userSlice";
 import { Link } from "react-router-dom";
 
 const UsersList = () => {
@@ -22,13 +27,15 @@ const UsersList = () => {
   }, [dispatch, navigate]);
 
   const deleteHandler = (id) => {
-    if (window.confirm("Are you sure?")) {
-      console.log(id);
+    if (window.confirm("Are you sure you want to delete this user?")) {
+      dispatch(deleteUserById(id));
+
       toast.success("User Deleted Successfully", {
         position: "top-center",
         autoClose: 5000,
         hideProgressBar: false,
         closeOnClick: true,
+        draggable: true,
       });
     }
   };
