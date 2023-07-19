@@ -31,6 +31,7 @@ const Login = () => {
 
   return (
     <div className="bg-[#000] pt-28">
+      <ToastContainer />
       <div className="bg-[#161616] mx-auto w-[30%] px-10 rounded-lg pb-10">
         <div className="flex justify-center md:flex-row gap-5 pt-10">
           <div className="flex flex-col w-full">

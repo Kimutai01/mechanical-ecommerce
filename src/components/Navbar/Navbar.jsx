@@ -89,30 +89,35 @@ const NavBar = () => {
                 Home
               </li>
             </Link>
-            <div className="group ml-10">
-              <li className="font-medium  text-xl hover:text-[#ff4d23] hover:scale-105 transition-all duration-all hover:border-y-black ">
-                Services
-              </li>
-            </div>
-            <div className="group ml-10">
-              <Link
-                className="font-medium  text-xl hover:text-[#ff4d23] hover:scale-105 transition-all duration-all hover:border-y-black "
-                to="/store"
-              >
-                Store
-              </Link>
-            </div>
-            <Link to="/about">
-              <li className="ml-10 font-medium  text-xl hover:text-[#ff4d23] hover:scale-105 transition-all duration-all hover:border-y-black ">
-                About
-              </li>
-            </Link>
 
-            <Link to="/contact">
-              <li className="ml-10 font-medium  text-xl hover:text-[#ff4d23] hover:scale-105 transition-all duration-all hover:border-y-black ">
-                Contact
-              </li>
-            </Link>
+            {user && user.isAdmin && (
+              <div className="group ml-10">
+                <li className="font-medium  text-xl hover:text-[#ff4d23] hover:scale-105 transition-all duration-all hover:border-y-black ">
+                  Admin
+                  <div className="opacity-0 group-hover:opacity-100 w-[200px] absolute left-0 top-full bg-[#000] pt-10 py-2 rounded-lg shadow-lg">
+                    <ul className="p-2 flex flex-col">
+                      <Link
+                        to="/admin/userlist"
+                        className="text-white py-1 px-2 relative hover:text-[#ff4d23] hover:scale-105 transition-all duration-all hover:border-y-black"
+                      >
+                        Users
+                      </Link>
+                      <Link to="/admin/products">
+                        <div className="text-[#fff] py-1 px-2 hover:text-[#ff4d23] hover:scale-105 transition-all duration-all hover:border-y-black">
+                          Products
+                        </div>
+                      </Link>
+
+                      <Link to="/admin/orders">
+                        <div className="text-[#fff] py-1 px-2 hover:text-[#ff4d23] hover:scale-105 transition-all duration-all hover:border-y-black">
+                          Orders
+                        </div>
+                      </Link>
+                    </ul>
+                  </div>
+                </li>
+              </div>
+            )}
           </ul>
           <div
             className="md:hidden flex justify-between items-center w-full h-full"
@@ -196,6 +201,7 @@ const NavBar = () => {
               </Link>
             )}
           </div>
+
           <Link to="/cart">
             <div className="relative">
               <HiShoppingCart

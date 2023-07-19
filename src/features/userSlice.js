@@ -6,6 +6,7 @@ const userInfoFromStorage = localStorage.getItem("userInfo");
 
 const initialState = {
   user: userInfoFromStorage ? JSON.parse(userInfoFromStorage) : null,
+  users: [],
 };
 
 export const login = (email, password) => async (dispatch) => {
@@ -48,6 +49,27 @@ export const register = (name, email, password) => async (dispatch) => {
   }
 };
 
+export const getAllUsers = () => async (dispatch, getState) => {
+  try {
+    const {
+      user: { user },
+    } = getState();
+    const token = user.token;
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    };
+    const { data } = await axios.get(
+      "http://127.0.0.1:8000/api/users/",
+      config
+    );
+    dispatch(getUsers(data));
+  } catch (error) {
+    console.error("Error getting users:", error);
+  }
+};
+
 export const logoutUser = () => (dispatch) => {
   localStorage.removeItem("userInfo");
   dispatch(logout());
@@ -67,10 +89,15 @@ const userSlice = createSlice({
     registerSuccess: (state, action) => {
       state.user = action.payload;
     },
+    getUsers: (state, action) => {
+      state.users = action.payload;
+    },
   },
 });
 
 export default userSlice.reducer;
 export const { loginSuccess, logout, registerSuccess } = userSlice.actions;
+export const { getUsers } = userSlice.actions;
 
 export const selectUser = (state) => state.user.user;
+export const selectUsers = (state) => state.user.users;
