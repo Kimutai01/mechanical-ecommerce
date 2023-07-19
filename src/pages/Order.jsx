@@ -67,6 +67,7 @@ const Order = () => {
     console.log(paymentResult);
     if (orderDetail._id) {
       dispatch(payOrder(orderDetail._id, paymentResult));
+
       // console.log({ id: orderDetail._id, paymentResult })
     }
   };

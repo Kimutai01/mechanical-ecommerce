@@ -4,6 +4,7 @@ import { ToastContainer, toast } from "react-toastify";
 import { useLocation, useNavigate } from "react-router-dom";
 import { selectUser } from "../features/userSlice";
 import { userDetailReset } from "../features/profileSlice";
+import { ImCross } from "react-icons/im";
 
 import { AiFillInstagram } from "react-icons/ai";
 import { AiFillFacebook } from "react-icons/ai";
@@ -17,6 +18,8 @@ import { IoLocationSharp } from "react-icons/io5";
 import { Link, redirect } from "react-router-dom";
 import { selectUserDetails, updateUserProfile } from "../features/profileSlice";
 import { getUserDetails } from "../features/profileSlice";
+import { listAllOrders } from "../features/orderSlice";
+import { selectOrders } from "../features/orderSlice";
 
 const Profile = () => {
   const [name, setName] = useState("");
@@ -24,6 +27,9 @@ const Profile = () => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [message, setMessage] = useState(null);
+
+  const orders = useSelector(selectOrders);
+  console.log(orders);
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -43,7 +49,6 @@ const Profile = () => {
           password: password,
         })
       );
-      
     }
   };
   toast.error(message, {
@@ -68,8 +73,13 @@ const Profile = () => {
       }
     }
   }, [navigate, user, userDetails, dispatch]);
+
+  useEffect(() => {
+    dispatch(listAllOrders());
+  }, [dispatch]);
+
   return (
-    <div className="bg-[#000] flex flex-col md:flex-row pt-20 px-5 md:px-32 pb-20 gap-16">
+    <div className="bg-[#000] flex flex-col md:flex-row pt-24 px-5 md:px-24 pb-20 gap-10">
       <div className="bg-[#161616] mx-auto w-[30%] px-10 rounded-lg pb-10">
         <div className="flex justify-center md:flex-row gap-5 pt-10">
           <div className="flex flex-col w-full">
@@ -161,48 +171,70 @@ const Profile = () => {
         </p>
       </div>
       <div>
-        <h1 className="text-white text-4xl font-bold uppercase">My Orders</h1>
-        <div className="mt-10 flex gap-5">
-          <AiFillInstagram color="#ff4d24" size="1.5rem" />
-          <AiFillFacebook color="#ff4d24" size="1.5rem" />
-          <FaTwitter color="#ff4d24" size="1.5rem" />
-        </div>
-        <div className="mt-10 flex items-center gap-5">
-          <IoMdMail color="#ff4d24" size="1.5rem" />
-          <h1 className="text-lg font-medium">
-            <a
-              href="mailto:mechanic@eg.com"
-              className="text-white hover:text-[grey]"
-            >
-              mechanic@gmail.com
-            </a>
-          </h1>
-        </div>
-        <div className="mt-10 flex gap-5">
-          <IoLocationSharp color="#ff4d24" size="1.5rem" />
-          <h1 className="text-white flex flex-col">
-            <a
-              href="https://goo.gl/maps/7XJqJqE4YrXZ6Y5r9"
-              className="text-white hover:text-[grey]"
-            >
-              123, Main Street, Nairobi, Kenya, 00100
-            </a>
-            <a
-              href="https://goo.gl/maps/7XJqJqE4YrXZ6Y5r9"
-              className="text-white mt-3 hover:text-[grey]"
-            >
-              456, Main Street, Nairobi, Kenya, 00100
-            </a>
-          </h1>
-        </div>
-        <div className="flex mt-10 gap-5">
-          <AiFillPhone color="#ff4d24" size="1.5rem" />
-          <h1 className="text-white">
-            <a href="tel:123-456-7890" className="text-white hover:text-[grey]">
-              123-456-7890
-            </a>
-          </h1>
-        </div>
+        <h1 className="text-white text-4xl font-bold uppercase text-center">
+          My Orders
+        </h1>
+
+        <table className="table-auto mt-10">
+          <thead>
+            <tr>
+              <th className="text-white text-lg font-bold uppercase px-4 py-2">
+                Order ID
+              </th>
+              <th className="text-white text-lg font-bold uppercase px-4 py-2">
+                Date
+              </th>
+              <th className="text-white text-lg font-bold uppercase px-4 py-2">
+                Total
+              </th>
+              <th className="text-white text-lg font-bold uppercase px-4 py-2">
+                Paid
+              </th>
+              <th className="text-white text-lg font-bold uppercase px-4 py-2">
+                Delivered
+              </th>
+              <th className="text-white text-lg font-bold uppercase px-4 py-2">
+                Details
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {orders.map((order) => (
+              <tr key={order._id} className="border-b-[1px] border-[#ff4d24]">
+                <td className="text-white text-lg font-medium px-4 py-2">
+                  {order._id}
+                </td>
+                <td className="text-white text-lg font-medium px-4 py-2">
+                  {order.createdAt.substring(0, 10)}
+                </td>
+                <td className="text-white text-lg font-medium px-4 py-2">
+                  {order.totalPrice}
+                </td>
+                <td className="text-white text-lg font-medium px-4 py-2">
+                  {order.isPaid ? (
+                    order.paidAt.substring(0, 10)
+                  ) : (
+                    <ImCross className="text-[#ff4d24] ml-10 text-2xl" />
+                  )}
+                </td>
+                <td className="text-white text-lg font-medium px-4 py-2">
+                  {order.isDelivered ? (
+                    order.deliveredAt.substring(0, 10)
+                  ) : (
+                    <ImCross className="text-[#ff4d24]  text-2xl ml-10" />
+                  )}
+                </td>
+                <td className="text-white text-lg font-medium px-4 py-2">
+                  <Link to={`/order/${order._id}`}>
+                    <button className="why-btn">
+                      <h1 className="font-bold">Details</h1>
+                    </button>
+                  </Link>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
     </div>
   );
