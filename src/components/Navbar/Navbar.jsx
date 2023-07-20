@@ -108,7 +108,7 @@ const NavBar = () => {
                         </div>
                       </Link>
 
-                      <Link to="/admin/orders">
+                      <Link to="/admin/orderlist">
                         <div className="text-[#fff] py-1 px-2 hover:text-[#ff4d23] hover:scale-105 transition-all duration-all hover:border-y-black">
                           Orders
                         </div>

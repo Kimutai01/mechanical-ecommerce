@@ -116,10 +116,37 @@ export const listAllOrders = () => async (dispatch, getState) => {
   }
 };
 
+export const getAllOrders = () => async (dispatch, getState) => {
+  try {
+    dispatch(setLoading(true));
+    const {
+      user: { user },
+    } = getState();
+    const token = user.token;
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    };
+    const { data } = await axios.get(
+      `http://127.0.0.1:8000/api/orders/`,
+      config
+    );
+
+    dispatch(allOrders(data));
+    dispatch(setLoading(false));
+  } catch (error) {
+    console.error("Error listing orders:", error);
+    dispatch(setError(error.message));
+    dispatch(setLoading(false));
+  }
+};
+
 const initialState = {
   order: {},
   orderDetails: {},
   orderPay: {},
+  orders: [],
   loading: false,
   error: null,
   orders: [],
@@ -151,6 +178,9 @@ const orderSlice = createSlice({
     listOrders: (state, action) => {
       state.orders = action.payload;
     },
+    allOrders: (state, action) => {
+      state.orders = action.payload;
+    },
   },
 });
 
@@ -162,6 +192,7 @@ export const {
   setError,
   orderPay,
   listOrders,
+  allOrders,
 } = orderSlice.actions;
 
 export const selectOrder = (state) => state.order.order;
@@ -170,5 +201,6 @@ export const selectOrderPay = (state) => state.order.orderPay;
 export const selectLoading = (state) => state.order.loading;
 export const selectError = (state) => state.order.error;
 export const selectOrders = (state) => state.order.orders;
+export const selectAllOrders = (state) => state.order.orders;
 
 export default orderSlice.reducer;

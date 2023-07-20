@@ -5,6 +5,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { selectUser } from "../features/userSlice";
 import { register } from "../features/userSlice";
 import { useParams } from "react-router-dom";
+import axios from "axios";
 
 import { Link, redirect } from "react-router-dom";
 import { getUserDetails, selectUserDetails } from "../features/profileSlice";
@@ -24,6 +25,7 @@ const ProductEdit = () => {
   const [brand, setBrand] = useState("");
   const [countInStock, setCountInStock] = useState("");
   const [description, setDescription] = useState("");
+  const [uploading, setUploading] = useState(false);
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -67,9 +69,42 @@ const ProductEdit = () => {
 
     navigate("/admin/products");
   };
+  const user = useSelector(selectUser);
+  console.log(user);
+
+  const uploadFileHandler = async (e) => {
+    const file = e.target.files[0];
+    console.log(file);
+    const formData = new FormData();
+    formData.append("image", file);
+    formData.append("product_id", id);
+
+    try {
+      setUploading(true);
+
+      const config = {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${user.token}`,
+        },
+      };
+
+      const { data } = await axios.post(
+        `http://127.0.0.1:8000/api/products/upload/`,
+        formData,
+        config
+      );
+
+      setImage(data);
+      console.log(data);
+      setUploading(false);
+    } catch (error) {
+      console.error(error);
+      setUploading(false);
+    }
+  };
 
   const dispatch = useDispatch();
-  const user = useSelector(selectUserDetails);
 
   useEffect(() => {
     dispatch(fetchProduct(id));
@@ -148,6 +183,19 @@ const ProductEdit = () => {
               onChange={(e) => setImage(e.target.value)}
               className="bg-[#161616] text-white border-[grey] border-[1px] rounded-lg p-2 font-medium focus:outline-none focus:border-[#ff4d24]"
             />
+
+            <input
+              type="file"
+              id="image-file"
+              name="image-file"
+              onChange={uploadFileHandler}
+              className="mt-4 bg-[#161616] text-white border-[grey] border-[1px] rounded-lg p-2 font-medium focus:outline-none focus:border-[#ff4d24]"
+            />
+            {uploading && (
+              <div className="flex justify-center items-center pt-28 bg-black">
+                <div className="w-20 h-20 rounded-full animate-spin border-2 border-solid border-[red] border-t-transparent"></div>
+              </div>
+            )}
           </div>
         </div>
 

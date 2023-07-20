@@ -16,6 +16,7 @@ import UsersList from "./components/UsersList";
 import UserEdit from "./pages/UserEdit";
 import ProductList from "./pages/ProductList";
 import ProductEdit from "./pages/ProductEdit";
+import OrderList from "./pages/OrderList";
 
 function App() {
   return (
@@ -36,6 +37,7 @@ function App() {
         <Route path="/admin/user/:id/edit" element={<UserEdit />} />
         <Route path="/admin/products" element={<ProductList />} />
         <Route path="/admin/product/:id/edit" element={<ProductEdit />} />
+        <Route path="/admin/orderlist" element={<OrderList />} />
       </Routes>
       <Footer />
     </>
