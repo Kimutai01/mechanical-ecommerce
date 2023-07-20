@@ -3,7 +3,7 @@ import axios from "axios";
 
 const productsUrl = "http://127.0.0.1:8000/api/products/";
 const initialState = {
-  product: {},
+  product: null,
   status: "idle",
   error: null,
 };
@@ -16,10 +16,33 @@ export const fetchProduct = createAsyncThunk(
   }
 );
 
+export const updateProductById = (product) => async (dispatch, getState) => {
+  try {
+    const {
+      user: { user },
+    } = getState();
+    const token = user.token;
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    };
+    await axios.put(`${productsUrl}update/${product._id}/`, product, config);
+    dispatch(fetchProduct(product.id));
+  } catch (error) {
+    console.error("Error updating product:", error);
+  }
+};
+
 const productSlice = createSlice({
   name: "product",
   initialState,
-  reducers: {},
+  reducers: {
+    updateProduct: (state, action) => {
+      state.product = action.payload;
+    },
+  },
   extraReducers: {
     [fetchProduct.pending]: (state, action) => {
       state.status = "loading";
