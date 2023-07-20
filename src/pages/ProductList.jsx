@@ -1,40 +1,37 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { ToastContainer, toast } from "react-toastify";
-import { useLocation, useNavigate } from "react-router-dom";
-import { useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 import {
-  getAllUsers,
-  selectUsers,
-  selectUser,
-  deleteUserById,
-} from "../features/userSlice";
-import { Link } from "react-router-dom";
-import {
-  deleteProductById,
   fetchProducts,
+  deleteProductById,
+  createNewProduct,
+  createProductReset,
+  selectAllProducts,
+  getCreatedProduct,
   getProductsError,
   getProductsStatus,
-  selectAllProducts,
 } from "../features/productsSlice";
 
 const ProductList = () => {
+  const navigate = useNavigate();
   const products = useSelector(selectAllProducts);
   const error = useSelector(getProductsError);
   const status = useSelector(getProductsStatus);
-  const { id } = useParams();
   const dispatch = useDispatch();
+  const created = useSelector(getCreatedProduct);
 
   const fetchAllProducts = () => {
     dispatch(fetchProducts());
   };
 
   useEffect(() => {
-    if (status === "idle") {
-      fetchAllProducts();
-    }
+    fetchAllProducts();
+  }, []);
 
+  useEffect(() => {
     if (status === "failed") {
       toast.error(error, {
         position: "top-center",
@@ -44,35 +41,32 @@ const ProductList = () => {
         draggable: true,
       });
     }
-  }, [status, dispatch, products, fetchAllProducts]);
+  }, [status, error]);
 
   const deleteHandler = (id) => {
-    if (window.confirm("Are you sure you want to delete this user?")) {
+    if (window.confirm("Are you sure you want to delete this product?")) {
       dispatch(deleteProductById(id));
-      toast.success("User Deleted Successfully", {
+      toast.success("Product Deleted Successfully", {
         position: "top-center",
         autoClose: 5000,
         hideProgressBar: false,
         closeOnClick: true,
         draggable: true,
       });
-      setTimeout(() => {
-        window.location.reload();
-      }, 3000);
     }
   };
 
   const createProductHandler = () => {
-    // dispatch(createProduct());
-    // toast.success("Product Created Successfully", {
-    //   position: "top-center",
-    //   autoClose: 5000,
-    //   hideProgressBar: false,
-    //   closeOnClick: true,
-    //   draggable: true,
-    // });
-    // navigate(`/admin/productlist`);
+    dispatch(createNewProduct());
   };
+
+  useEffect(() => {
+    if (created && created._id) {
+      navigate(`/admin/product/${created._id}/edit`);
+
+      dispatch(createProductReset());
+    }
+  }, [created, navigate, dispatch]);
 
   return (
     <div className="bg-[#000] pt-20 px-20">
