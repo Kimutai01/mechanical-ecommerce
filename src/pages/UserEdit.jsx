@@ -36,17 +36,19 @@ const UserEdit = () => {
   });
   const dispatch = useDispatch();
   const user = useSelector(selectUserDetails);
+
   useEffect(() => {
-    if (!user.name || user._id !== id) {
-      dispatch(getUserDetails(id));
-    }
+    dispatch(getUserDetails(id));
+  }, [dispatch, id]);
+
+  useEffect(() => {
     setName(user.name);
     setEmail(user.email);
     setAdmin(user.isAdmin);
-  }, [dispatch, id, user]);
+  }, [user]);
   return (
     <div className="bg-[#000] pt-28">
-      <Link to="/admin/userslist">
+      <Link to="/admin/userlist">
         <button className="why-btn ml-40  mt-10 mb-10 ">
           <h1 className="font-bold">Go Back</h1>
         </button>
