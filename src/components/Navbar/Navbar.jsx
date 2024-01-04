@@ -6,6 +6,7 @@ import { AiOutlineClose, AiOutlineMenu } from "react-icons/ai";
 import { selectUser } from "../../features/userSlice";
 import { logoutUser } from "../../features/userSlice";
 import { CiUser } from "react-icons/ci";
+import { useNavigate } from "react-router-dom";
 
 import { Link } from "react-router-dom";
 import { RiMenu5Line } from "react-icons/ri";
@@ -15,6 +16,7 @@ import { BsChevronDown } from "react-icons/bs";
 
 import { motion } from "framer-motion";
 const NavBar = () => {
+  const navigate = useNavigate();
   const user = useSelector(selectUser);
   const [nav, setNav] = useState(false);
   const [shadow, setShadow] = useState(false);
@@ -65,6 +67,7 @@ const NavBar = () => {
       closeOnClick: true,
       draggable: true,
     });
+    navigate("/");
   };
 
   return (

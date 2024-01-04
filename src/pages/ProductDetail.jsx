@@ -73,7 +73,7 @@ const ProductDetail = ({}) => {
         <div className="bg-[#000] px-40 pb-20 flex">
           <div className="mr-20 w-[50%]">
             <img
-              src={`http://127.0.0.1:8000/${product.image}`}
+              src={`https://mechanic.lipiangoma.co.ke/${product.image}`}
               alt={product.name}
               className=" w-full rounded-t-lg"
             />

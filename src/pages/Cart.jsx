@@ -57,7 +57,7 @@ const Cart = () => {
           {cart.map((item) => (
             <div className="flex gap-5 rounded-lg p-4 items-center bg-[#161616]">
               <img
-                src={`http://127.0.0.1:8000/${item.image}`}
+                src={`https://mechanic.lipiangoma.co.ke/${item.image}`}
                 alt=""
                 className="h-28 w-28 rounded-md"
               />

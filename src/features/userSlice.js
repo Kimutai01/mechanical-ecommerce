@@ -17,7 +17,7 @@ export const login = (email, password) => async (dispatch) => {
       },
     };
     const { data } = await axios.post(
-      "http://127.0.0.1:8000/api/users/login/",
+      "https://mechanic.lipiangoma.co.ke/api/users/login/",
       { username: email, password: password },
       config
     );
@@ -37,7 +37,7 @@ export const register = (name, email, password) => async (dispatch) => {
       },
     };
     const { data } = await axios.post(
-      "http://127.0.0.1:8000/api/users/register/",
+      "https://mechanic.lipiangoma.co.ke/api/users/register/",
       { name, email, password },
       config
     );
@@ -61,7 +61,7 @@ export const getAllUsers = () => async (dispatch, getState) => {
       },
     };
     const { data } = await axios.get(
-      "http://127.0.0.1:8000/api/users/",
+      "https://mechanic.lipiangoma.co.ke/api/users/",
       config
     );
     dispatch(getUsers(data));
@@ -81,7 +81,10 @@ export const deleteUserById = (id) => async (dispatch, getState) => {
         Authorization: `Bearer ${token}`,
       },
     };
-    await axios.delete(`http://127.0.0.1:8000/api/users/delete/${id}/`, config);
+    await axios.delete(
+      `https://mechanic.lipiangoma.co.ke/api/users/delete/${id}/`,
+      config
+    );
     dispatch(deleteUser(id));
   } catch (error) {
     console.error("Error deleting user:", error);

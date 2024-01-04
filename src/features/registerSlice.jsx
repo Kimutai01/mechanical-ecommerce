@@ -4,7 +4,7 @@
 // export const registerUser = (name, email, password) => async (dispatch) => {
 //   try {
 //     const { data } = await axios.post(
-//       "http://127.0.0.1:8000/api/users/register",
+//       "https://mechanic.lipiangoma.co.ke/api/users/register",
 //       {
 //         name,
 //         username: email,

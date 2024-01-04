@@ -20,7 +20,7 @@ export const getUserDetails = (id) => async (dispatch, getState) => {
       },
     };
     const { data } = await axios.get(
-      `http://127.0.0.1:8000/api/users/${id}/`,
+      `https://mechanic.lipiangoma.co.ke/api/users/${id}/`,
       config
     );
 
@@ -43,7 +43,7 @@ export const updateUserProfile = (userr) => async (dispatch, getState) => {
       },
     };
     const { data } = await axios.put(
-      `http://127.0.0.1:8000/api/users/profile/update/`,
+      `https://mechanic.lipiangoma.co.ke/api/users/profile/update/`,
       userr,
       config
     );

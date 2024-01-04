@@ -16,7 +16,7 @@ export const createOrder = (order) => async (dispatch, getState) => {
       },
     };
     const { data } = await axios.post(
-      `http://127.0.0.1:8000/api/orders/add/`,
+      `https://mechanic.lipiangoma.co.ke/api/orders/add/`,
       order,
       config
     );
@@ -47,7 +47,7 @@ export const orderDetails = (id) => async (dispatch, getState) => {
       },
     };
     const { data } = await axios.get(
-      `http://127.0.0.1:8000/api/orders/${id}/`,
+      `https://mechanic.lipiangoma.co.ke/api/orders/${id}/`,
       config
     );
 
@@ -75,7 +75,7 @@ export const payOrder = (id, paymentResult) => async (dispatch, getState) => {
       },
     };
     const { data } = await axios.put(
-      `http://127.0.0.1:8000/api/orders/${id}/pay/`,
+      `https://mechanic.lipiangoma.co.ke/api/orders/${id}/pay/`,
       paymentResult,
       config
     );
@@ -103,7 +103,7 @@ export const listAllOrders = () => async (dispatch, getState) => {
       },
     };
     const { data } = await axios.get(
-      `http://127.0.0.1:8000/api/orders/myorders`,
+      `https://mechanic.lipiangoma.co.ke/api/orders/myorders`,
       config
     );
 
@@ -129,7 +129,7 @@ export const getAllOrders = () => async (dispatch, getState) => {
       },
     };
     const { data } = await axios.get(
-      `http://127.0.0.1:8000/api/orders/`,
+      `https://mechanic.lipiangoma.co.ke/api/orders/`,
       config
     );
 
@@ -142,11 +142,36 @@ export const getAllOrders = () => async (dispatch, getState) => {
   }
 };
 
+export const markOrderAsDelivered = (id) => async (dispatch, getState) => {
+  try {
+    dispatch(setLoading(true));
+    const {
+      user: { user },
+    } = getState();
+    const token = user.token;
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    };
+    await axios.put(
+      `https://mechanic.lipiangoma.co.ke/api/orders/${id}/deliver/`,
+      {},
+      config
+    );
+    dispatch(markOrderDelivered(id));
+    dispatch(setLoading(false));
+  } catch (error) {
+    console.error("Error marking order as delivered:", error);
+    dispatch(setError(error.message));
+    dispatch(setLoading(false));
+  }
+};
+
 const initialState = {
   order: {},
   orderDetails: {},
   orderPay: {},
-  orders: [],
   loading: false,
   error: null,
   orders: [],
@@ -181,6 +206,9 @@ const orderSlice = createSlice({
     allOrders: (state, action) => {
       state.orders = action.payload;
     },
+    markOrderDelivered: (state, action) => {
+      state.order = action.payload;
+    },
   },
 });
 
@@ -193,6 +221,7 @@ export const {
   orderPay,
   listOrders,
   allOrders,
+  markOrderDelivered,
 } = orderSlice.actions;
 
 export const selectOrder = (state) => state.order.order;

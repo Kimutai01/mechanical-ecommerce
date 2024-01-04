@@ -90,7 +90,7 @@ const ProductEdit = () => {
       };
 
       const { data } = await axios.post(
-        `http://127.0.0.1:8000/api/products/upload/`,
+        `https://mechanic.lipiangoma.co.ke/api/products/upload/`,
         formData,
         config
       );
@@ -168,7 +168,7 @@ const ProductEdit = () => {
         <div className="flex justify-center md:flex-row mt-10 gap-5">
           <div className="flex flex-col w-full">
             <img
-              src={`http://127.0.0.1:8000//${image}`}
+              src={`https://mechanic.lipiangoma.co.ke//${image}`}
               alt=""
               className="h-20 w-20"
             />

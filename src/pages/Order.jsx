@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
-import { orderDetails } from "../features/orderSlice";
+import { markOrderAsDelivered, orderDetails } from "../features/orderSlice";
 import CheckoutSteps from "../components/CheckoutSteps";
 import { selectOrderDetails } from "../features/orderSlice";
 import { selectOrderPay } from "../features/orderSlice";
@@ -14,9 +14,13 @@ const Order = () => {
   const dispatch = useDispatch();
   const [sdkReady, setSdkReady] = useState(false);
 
+  const user = useSelector((state) => state.user.user);
+  console.log(user);
+
   const { id } = useParams();
   console.log(id);
   const orderDetail = useSelector(selectOrderDetails);
+
   const orderPay = useSelector(selectOrderPay);
   const error = useSelector(selectError);
   console.log(orderDetail);
@@ -29,6 +33,10 @@ const Order = () => {
   //   AbUcQE9bOtTKsrCYMEaJ7jWUP2mr9nNuqglCRz6Z8AATAZvwhIFag1k7bYRPjH3vy9ClInyOlHtZWY9w;
 
   const loadingPay = useSelector(selectLoading);
+  const handleDeliver = () => {
+    dispatch(markOrderAsDelivered(orderDetail._id));
+    window.location.reload();
+  };
 
   const addPayPalScript = () => {
     const script = document.createElement("script");
@@ -42,7 +50,6 @@ const Order = () => {
   };
   useEffect(() => {
     if (!orderDetail || !orderDetail._id) {
-      // Order details are not fetched yet or are undefined, add any additional logic if needed
       return;
     }
     if (!orderDetail.isPaid) {
@@ -59,7 +66,6 @@ const Order = () => {
   }, [dispatch, id]);
   console.log(orderDetail._id);
 
-  // Check if orderDetail is not loaded yet
   if (!orderDetail._id) {
     return <div>Loading...</div>;
   }
@@ -139,7 +145,7 @@ const Order = () => {
               >
                 <div className="flex items-center">
                   <img
-                    src={`http://127.0.0.1:8000/${item.image}`}
+                    src={`https://mechanic.lipiangoma.co.ke/${item.image}`}
                     className="w-16 h-16 rounded-lg"
                     alt={item.name}
                   />
@@ -180,21 +186,21 @@ const Order = () => {
               <div className="flex justify-between flex-row mt-5 gap-32 border-b border-[gray] pb-5">
                 <h1 className="text-[#fff] text-lg font-medium">Shipping</h1>
                 <p className="text-[#fff] text-lg font-medium">
-                  $ {orderDetail.shippingPrice}
+                  {orderDetail.shippingPrice} ksh
                 </p>
               </div>
 
               <div className="flex justify-between flex-row mt-5 gap-32 border-b border-[gray] pb-5">
                 <h1 className="text-[#fff] text-lg font-medium">Tax</h1>
                 <p className="text-[#fff] text-lg font-medium">
-                  $ {orderDetail.taxPrice}
+                  {orderDetail.taxPrice} ksh
                 </p>
               </div>
 
               <div className="flex justify-between flex-row mt-5 gap-32 border-b border-[gray] pb-5">
                 <h1 className="text-[#fff] text-lg font-medium">Total</h1>
                 <p className="text-[#fff] text-lg font-medium">
-                  $ {orderDetail.totalPrice}
+                  {orderDetail.totalPrice} ksh
                 </p>
               </div>
               <div className="flex justify-between flex-row mt-5 gap-32 border-b border-[gray] pb-5">
@@ -212,6 +218,18 @@ const Order = () => {
                   </div>
                 )}
               </div>
+              {user.isAdmin &&
+                orderDetail.isPaid &&
+                !orderDetail.isDelivered && (
+                  <div
+                    className="flex justify-between flex-row mt-5 gap-32 border-b border-[gray] pb-5"
+                    onClick={handleDeliver}
+                  >
+                    <button className="why-btn  mt-10 mb-10 ">
+                      <h1 className="font-bold">Mark as Delivered</h1>
+                    </button>
+                  </div>
+                )}
             </div>
           </div>
         </div>
